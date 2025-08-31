@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicación Web</title>
+    <link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="./css/normalize.css">
+    <link rel="stylesheet" href="./desing.css">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1>Encuentra tus archivos en segundos</h1>
+    <div class="image-wrapper">
+        <img src="lookarticle.png" alt="Imagen representativa de búsqueda">
+    </div>        
+    <form action="/hello">
+        <label for="name">Introduce el archivo a buscar: </label><br>
+        <input type="text" id="name" name="name" placeholder="Ejemplo: base.txt"><br><br>
+        <input type="button" class="btn-morado" value="Buscar" onclick="loadGetMsg()">
+    </form> 
+    <div id="getrespmsg" class="btn-container-wrapper"></div>
+
+    <script>
+        function loadGetMsg() {
+            let nameVar = document.getElementById("name").value;
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                const contentType = xhttp.getResponseHeader("Content-Type");
+                if (contentType.startsWith("image/")) {
+                    const blob = new Blob([this.response], { type: contentType });
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(blob);
+                    document.getElementById("getrespmsg").innerHTML = '';
+                    document.getElementById("getrespmsg").appendChild(img);
+                } else {
+                    const text = new TextDecoder("utf-8").decode(this.response);
+                    document.getElementById("getrespmsg").innerHTML = text;
+                }
+            }
+            xhttp.open("GET", "/hello?name=" + nameVar);
+            xhttp.responseType = 'arraybuffer'; 
+            xhttp.send();
+        }
+    </script>
+</body>
+</html>
