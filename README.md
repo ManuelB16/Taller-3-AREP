@@ -1,10 +1,8 @@
-# Microframework Web en Java para Servicios REST y Archivos Estáticos
+# Arquitecturas de Servidores de Aplicaciones, Meta protocolos de objetos, Patrón IoC, Reflexión
 Este proyecto implementa un **microframework web en Java** que permite:
 Definir servicios REST con funciones Lambda.  
 Manejar parámetros de consulta (**Query Parameters**).  
 Servir archivos estáticos (HTML, JS, CSS, imágenes).  
-
-Forma parte de la evolución del **Taller 01**, pero integrando más funcionalidades para un desarrollo web sencillo y potente.
 
 ---
 
@@ -18,11 +16,8 @@ Forma parte de la evolución del **Taller 01**, pero integrando más funcionalid
 
 ## Descripción de la Aplicación
 
-El microframework configura y ejecuta un **servidor HTTP sencillo** que soporta:  
-- Rutas REST dinámicas (`/api/...`).  
-- Entrega de archivos estáticos desde un directorio configurable (`resources/Files` o `webroot`).  
-
-Sirve como base para comprender cómo funcionan frameworks reales como **Spring Boot** o **SparkJava**.
+La aplicación consiste en un microframework en Java diseñado para configurar y ejecutar un servidor HTTP ligero. Este microframework ofrece una manera práctica de definir rutas básicas y servir archivos estáticos.
+Es especialmente útil para aprender los principios fundamentales del desarrollo de frameworks web orientados a servicios REST, ya que permite trabajar con parámetros de consulta, crear servicios REST y administrar archivos estáticos.
 
 ---
 
@@ -75,11 +70,11 @@ mvn exec:java -Dexec.mainClass="arep.taller2.web.Microframework"
 ```
 
 Luego abre en tu navegador:  
-👉 [http://localhost:35000/](http://localhost:35000/)  
+[http://localhost:35000/](http://localhost:35000/)  
 
 ---
 
-## 🧪 Ejecución de Tests
+## Ejecución de Tests
 
 Los tests garantizan que los endpoints REST funcionen correctamente:  
 
