@@ -20,14 +20,11 @@ import arep.taller2.web.Anotaciones.RestController;
  */
 public class HttpServer {
     public static Map<String, Method> services = new HashMap();
-    private static boolean primeraPeticion = true; //Revisa si la primera petición es verdadera
-    private static int PORT = 35000; // Puerto donde se inicia el programa 
+    private static boolean primeraPeticion = true;
+    private static int PORT = 35000;
     private static final String BASE_DIRECTORY = "src/main/resources/Files"; 
     public static final Utils staticFiles = new Utils();
 
-    // String que almacena la ruta de los archivos Controlador
-    // Route es una interfaz funcional que se utiliza para manejar las rutas, la Respuesta
-    //static Map<String, Route> routes = new HashMap<>(); // Rutas registradas en el servidor
 
     /**
      * Constructor de la clase HttpServer
@@ -42,12 +39,10 @@ public class HttpServer {
         ServerSocket serverSocket = new ServerSocket(PORT); 
         System.out.println("Servidor iniciado en el puerto " + PORT);
 
-        //Escucha simultaneamente por puerto
         while (true) {
             try (Socket clientSocket = serverSocket.accept()) {
                 handleRequest(clientSocket);
             }
-            //Si es la primera peticion, se cambia el valor de la variable
             primeraPeticion = false;
         }
     }
@@ -57,23 +52,18 @@ public class HttpServer {
      * @param clientSocket es el socket del cliente que realiza la solicitud
      */
     static void handleRequest(Socket clientSocket) {
-        // Abre un BufferedReader para leer la entrada del cliente
         try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            // Abre un PrintWriter para enviar exto al cliente
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-            // Abre un Buffere BufferedOutputStream para enviar datos binarios al cliente
              BufferedOutputStream bos = new BufferedOutputStream(clientSocket.getOutputStream());
-             // Abre un OutputStream para enviar datos al cliente
              OutputStream dataOut = clientSocket.getOutputStream();
         ) {
-            //Valor de cada invocación de BufferedReader
             String requestLine = in.readLine();
             if (requestLine == null || requestLine.isEmpty()) return;
 
             System.out.println("Solicitud recibida: " + requestLine);
             String[] requestParts = requestLine.split(" ");
-            String method = requestParts[0]; // GET, POST, PUT, DELETE, etc. Metodos que se están invocando
-            String path = requestParts[1]; // Ruta del recurso solicitado
+            String method = requestParts[0]; 
+            String path = requestParts[1];
             System.out.println(path);
 
             if (method.equals("GET") && !primeraPeticion) {
@@ -96,7 +86,6 @@ public class HttpServer {
      * @throws IOException es una excepción que se lanza si ocurre un error de entrada/salida
      */
     private static void serveStaticFile(String path, PrintWriter out, OutputStream dataOut, BufferedOutputStream bos) throws IOException {
-        //Se obtiene el valor de la variable almacenar
         String almacenar = URI.create(path).getQuery();
         if(almacenar != null){
             path = "/" + almacenar.split("=")[1];
@@ -230,20 +219,13 @@ public class HttpServer {
                 if(doc.getName().endsWith(".java")){
                     try {
                         String nameClass = "arep.taller2.web.Controller." + doc.getName().replace(".java", "");
-                        //Intenta cargar la clase especificada por el primer argumento
                         Class c = Class.forName(nameClass);
-                        //verifica si la clase cargada esta anotada con @RestController
                         if (!c.isAnnotationPresent(RestController.class)) {
-                            //Si no está anotada con @RestController, cierra el progama
                             System.exit(0);
                         }
-                        //Itera sobre los métodos declarados de la clase cargada
                         for (Method m : c.getDeclaredMethods()) {
-                            // Verifica si el método esta anotado con @GetMapping
                             if (m.isAnnotationPresent((Class<? extends Annotation>) GetMapping.class)) {
-                                // Recupera la anotación @GetMapping
                                 GetMapping a = m.getAnnotation(GetMapping.class);
-                                // Mapea el valor de la anotación al método en el mapa sevices
                                 services.put(a.value(), m);
                             }
                         }
